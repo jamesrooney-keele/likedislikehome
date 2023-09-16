@@ -47,8 +47,8 @@ if(isset($_POST['first_name']) && $_POST['first_name']!=''){
 	if($goodform){
 		$hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		
-		$statement = "UPDATE users SET email = :email, first_name = :first_name, last_name = :last_name";
-		$statement .= ", enabled = :enabled, admin = :admin, author = :author, editor = :editor, editor_chief = :editor_chief";
+		$statement = "UPDATE user SET email = :email, first_name = :first_name, last_name = :last_name";
+		$statement .= ", status = :status";
 		if($changingpassword){
 			$statement .= ", password = :password";
 		}
@@ -57,14 +57,12 @@ if(isset($_POST['first_name']) && $_POST['first_name']!=''){
 		$params[':email'] = $_POST['email'];
 		$params[':first_name'] = $_POST['first_name'];
 		$params[':last_name'] = $_POST['last_name'];
-		$params[':status'] = (isset($_POST['disabled']) && $_POST['disabled']=='on') ? 0 : 9;
-		$params[':admin'] = (isset($_POST['admin']) && $_POST['admin']=='on') ? 1 : 0;
+		$params[':status'] = (isset($_POST['disabled']) && $_POST['disabled']=='on') ? 9 : 0;
 		if($changingpassword){
 			$params[':password'] = $hashed_password;
 		}
-		$params[':siteid'] = $siteid;
-		$params[':userid'] = $user['id'];
-		pdoCall($statement, $params);
+		$params[':userid'] = $thisuserid;
+		$sth = pdoCall($statement, $params);
 		
 		if(is_null($sth->errorInfo()[2])){
 			echo "<div class='alert alert-success'>Succesfully updated ".htmlspecialchars($_POST['first_name'])." ".htmlspecialchars($_POST['last_name'])."</div>";
@@ -142,7 +140,7 @@ if(isset($_POST['first_name']) && $_POST['first_name']!=''){
 		echo "<div class='col-md-10'>";
 			echo "<div class='form-check'>";
 				echo "<input type='checkbox' id='disabled' name='disabled' class='form-check-input largecheckbox'";
-				if($user['status']==0){
+				if($user['status']==9){
 					echo " checked='checked'";
 				}
 				echo ">";
