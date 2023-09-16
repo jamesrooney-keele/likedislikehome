@@ -1,0 +1,18 @@
+ErrorDocument 404 /404.php
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^user/edit/(.*)/(.*)$ edituser.php?userid=$1&message=$2 [B,NC,L]
+RewriteRule ^user/edit/(.*)$ edituser.php?userid=$1 [B,NC,L]
+RewriteRule ^user/add/(.*)$ adduser.php?message=$1 [B,NC,L]
+RewriteRule ^user/add$ adduser.php [B,NC,L]
+RewriteRule ^user/list$ listusers.php [B,NC,L]
+RewriteRule ^site/edit/(.*)/(.*)$ editsite.php?siteid=$1&message=$2 [B,NC,L]
+RewriteRule ^site/edit/(.*)$ editsite.php?siteid=$1 [B,NC,L]
+RewriteRule ^site/add/(.*)$ addsite.php?message=$1 [B,NC,L]
+RewriteRule ^site/add$ addsite.php [B,NC,L]
+RewriteRule ^([^\.]+)$ $1.php [B,NC,L]
+
+<IfModule mod_headers.c>
+	Header set Content-Security-Policy ""
+</IfModule>

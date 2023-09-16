@@ -1,0 +1,5 @@
+www/images/
+www/vendor
+www/node_modules
+dbpasswd.txt
+dbconfig.php
